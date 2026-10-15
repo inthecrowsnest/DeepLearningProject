@@ -9,3 +9,9 @@ We removed 40 disputed words.
 Some German words are international words like detonáció.
 Related words, like a root and its compound, could end up on both sides of the split.
 
+## Loanword project setup
+
+- Python 3.9+ (on Windows use `python` instead of `python3`).
+- `pip install -r requirements.txt`, then `python -c "import huspacy; huspacy.download()"`.
+- `hungarian.jsonl` (560 MB) and the OpenSubtitles data are not in the repo. `build_table.py` needs the former; to train you only need `labeled_words.csv`.
+- Scripts find their files relative to their own folder, so they can be run from anywhere.
