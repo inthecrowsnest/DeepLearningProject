@@ -13,9 +13,20 @@ Outputs:
 
 import csv
 import json
+import sys
 from collections import Counter
+from pathlib import Path
 
-INPUT = "hungarian.jsonl"
+# Resolve files relative to this script, so it works from any working directory.
+HERE = Path(__file__).resolve().parent
+INPUT = HERE / "hungarian.jsonl"
+
+if not INPUT.exists():
+    sys.exit(
+        f"{INPUT} not found. It is 560 MB and not in the repo; download it from "
+        "https://kaikki.org/dictionary/Hungarian/ and place it next to this script.\n"
+        "If you only want to train, you don't need it: use labeled_words.csv."
+    )
 
 BORROW = {"bor", "bor+", "lbor", "slbor", "obor", "ubor"}
 INHERIT = {"inh", "inh+"}
@@ -85,7 +96,7 @@ with open(INPUT, encoding="utf-8") as f:
 # If a word is in both, the CLDF label wins because it is the expert source.
 added = overridden = 0
 try:
-    with open("cldf_turkic.csv", encoding="utf-8") as f:
+    with open(HERE / "cldf_turkic.csv", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             word = r["lemma"]
             if word in rows:
@@ -105,12 +116,12 @@ try:
 except FileNotFoundError:
     print("cldf_turkic.csv not found, skipping the CLDF merge")
 
-with open("words.csv", "w", newline="", encoding="utf-8") as f:
+with open(HERE / "words.csv", "w", newline="", encoding="utf-8") as f:
     w = csv.DictWriter(f, fieldnames=["lemma", "label", "source_code", "template", "n_sources", "dataset"])
     w.writeheader()
     w.writerows(rows.values())
 
-with open("source_counts.csv", "w", newline="", encoding="utf-8") as f:
+with open(HERE / "source_counts.csv", "w", newline="", encoding="utf-8") as f:
     w = csv.writer(f)
     w.writerow(["kind", "source_code", "count"])
     for (kind, code), n in code_counts.most_common():
