@@ -1,2 +1,5 @@
 huspacy
 pandas
+scikit-learn
+torch
+matplotlib
