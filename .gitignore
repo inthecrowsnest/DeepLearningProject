@@ -3,3 +3,5 @@ hungarian.jsonl
 # OpenSubtitles raw data (too large for git)
 OpenSubtitles/
 subtitles*.jsonl
+hu.zip
+hu.zip.part
